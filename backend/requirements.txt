@@ -25,9 +25,15 @@ pillow==11.0.0
 # Re-ranking (Cross-Encoder)
 sentence-transformers==3.3.1
 
+# # RAG Evaluation
+# ragas==0.2.6
+# datasets==3.1.0
+
 # RAG Evaluation
 ragas==0.2.6
 datasets==3.1.0
+numpy==1.26.4
+pyarrow==16.1.0
 
 # Resilience / retry
 tenacity==9.0.0
