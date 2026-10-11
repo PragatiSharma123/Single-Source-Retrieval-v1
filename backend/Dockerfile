@@ -25,12 +25,15 @@ COPY --from=builder /install /usr/local
 # Copy application source
 COPY app/ ./app/
 
-# Non-root user for security
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+# Non-root user setup and persistent data directory creation with correct ownership
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser && \
+    mkdir -p /data/faiss_index /data/logs && \
+    chown -R appuser:appgroup /data
+
 USER appuser
 
-# Persistent volume mounts (FAISS index and logs)
-VOLUME ["/app/faiss_index", "/app/logs"]
+# Persistent volume mounts
+VOLUME ["/data/faiss_index", "/data/logs"]
 
 EXPOSE 8000
 

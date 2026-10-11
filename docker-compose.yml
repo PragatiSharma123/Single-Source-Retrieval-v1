@@ -26,6 +26,8 @@ services:
       - ALLOWED_ORIGINS=http://localhost:3000
       - FAISS_INDEX_PATH=/data/faiss_index
       - EVAL_LOG_PATH=/data/logs/ragas_eval.jsonl
+      - HF_HOME=/tmp/huggingface
+      - TRANSFORMERS_CACHE=/tmp/huggingface
     volumes:
       - faiss_data:/data/faiss_index
       - eval_logs:/data/logs
@@ -33,12 +35,6 @@ services:
       - "8000:8000"
     networks:
       - app_net
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 15s
     healthcheck:
       test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')\" || exit 1"]
       interval: 10s
@@ -52,14 +48,11 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        # Baked into client-side JS — must be browser-accessible (localhost)
         NEXT_PUBLIC_API_URL: http://localhost:8000
     container_name: mlai_frontend
     restart: unless-stopped
     environment:
-      # Server-side rewrite destination — Docker internal hostname
       - INTERNAL_API_URL=http://backend:8000
-      # Browser-side direct calls (PDF upload progress tracking)
       - NEXT_PUBLIC_API_URL=http://localhost:8000
     ports:
       - "3000:3000"

@@ -46,7 +46,7 @@ def _get_llm() -> ChatOpenAI:
         openai_api_key=settings.openrouter_api_key,
         openai_api_base=settings.openrouter_base_url,
         temperature=0.2,
-        max_tokens=2048,
+        max_tokens=1000,
         default_headers={
             # OpenRouter strongly recommends these headers
             "HTTP-Referer": "https://my-learning-ai-assistant.local",
